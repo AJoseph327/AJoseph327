@@ -2,6 +2,13 @@ name: Update gold contribution constellation
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'README.md'
+      - 'scripts/generate_orbit.py'
+      - '.github/workflows/gold-orbit.yml'
   schedule:
     - cron: '17 5 * * *'
 
