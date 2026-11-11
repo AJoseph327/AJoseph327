@@ -1,0 +1,29 @@
+name: Update gold contribution constellation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 5 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  update-contributions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout personal profile repository
+        uses: actions/checkout@v4
+      - name: Generate real contribution artwork
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/generate_orbit.py
+      - name: Publish refreshed SVG
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/contribution-orbit.svg
+          if ! git diff --cached --quiet; then
+            git commit -m "Profile art: refresh real contribution animation"
+            git push
+          fi
